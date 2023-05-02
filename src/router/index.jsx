@@ -5,7 +5,7 @@ import { routersConfig } from './config';
 
 // router before each component
 function RouterBeforeEach(props) {
-  const { children, route } = props;
+  const { children } = props;
 
   // const location = useLocation();
   // const { pathname } = location;
