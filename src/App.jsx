@@ -7,8 +7,15 @@ import { chains, wagmiClient } from './config/wagmiClient';
 
 export default function App() {
   return (
-    <WagmiConfig client={wagmiClient}>
-      <RainbowKitProvider chains={chains}>
+    <WagmiConfig config={wagmiClient}>
+      <RainbowKitProvider
+        locale="en-US"
+        chains={chains}
+        appInfo={{
+          appName: 'CyberPetaCraft',
+          learnMoreUrl: 'https://cyberpetacraft.xyz',
+        }}
+      >
         <BrowserRouter>
           <Suspense>
             <RenderRouters />

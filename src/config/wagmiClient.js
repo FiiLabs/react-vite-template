@@ -1,23 +1,45 @@
-import { configureChains, createClient } from 'wagmi';
+import { configureChains, createConfig } from 'wagmi';
 import { bsc } from '@wagmi/core/chains';
-import { getDefaultWallets } from '@rainbow-me/rainbowkit';
+import {
+  metaMaskWallet, okxWallet, rainbowWallet, trustWallet, walletConnectWallet,
+} from '@rainbow-me/rainbowkit/wallets';
+import { connectorsForWallets, getDefaultWallets } from '@rainbow-me/rainbowkit';
 import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
 import { publicProvider } from 'wagmi/providers/public';
 
+const projectId = import.meta.env.VITE_APP_PROJECT_ID;
+
 export const chains = [bsc];
 
-const { connectors } = getDefaultWallets({
-  appName: 'My RainbowKit App',
+const { wallets } = getDefaultWallets({
+  appName: 'CyberPetaCraft',
   chains,
+  projectId,
 });
 
-const { provider } = configureChains(chains, [
-  jsonRpcProvider({ rpc: (_chain) => ({ http: _chain.rpcUrls.default }) }),
+const connectors = connectorsForWallets([
+  // ...wallets,
+  {
+    groupName: 'Popular',
+    wallets: [
+      // injectedWallet({ chains }),
+      metaMaskWallet({ chains }),
+      okxWallet({ chains }),
+      trustWallet({ projectId, chains }),
+      rainbowWallet({ projectId, chains }),
+      walletConnectWallet({ projectId, chains }),
+    ],
+  },
+  // ...wallets,
+]);
+
+const { publicClient } = configureChains(chains, [
+  jsonRpcProvider({ rpc: (_chain) => ({ http: _chain.rpcUrls.default?.http?.[0] }) }),
   publicProvider(),
 ]);
 
-export const wagmiClient = createClient({
+export const wagmiClient = createConfig({
   autoConnect: true,
   connectors,
-  provider,
+  publicClient,
 });

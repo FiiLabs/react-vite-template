@@ -5,6 +5,9 @@
     "baseUrl": "./",
     "moduleResolution": "node",
     "forceConsistentCasingInFileNames": false,
+    "types": [
+      "@emotion/react/types/css-prop"
+    ],
     "paths": {
       "@/*": [
         "src/*"
